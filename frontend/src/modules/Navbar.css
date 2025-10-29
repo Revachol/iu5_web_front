@@ -1,0 +1,70 @@
+/* modules/Navbar.css */
+.custom-navbar {
+    background-color: #e4e4e4;
+    height: 70px;
+    padding: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+  }
+  
+  .navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0 20px;
+    max-width: 1500px;
+    margin: 0 auto;
+  }
+  
+  .home-link {
+    color: black !important;
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+  
+  .home-link h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    font-family: "Jost", sans-serif;
+    color: #000;
+  }
+  
+  .home-link:hover {
+    text-decoration: none;
+  }
+  
+  .logo-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    padding: 0;
+  }
+  
+  .logo {
+    width: 80px;
+    height: auto;
+  }
+  
+  /* Адаптивность для мобильных устройств */
+  @media (max-width: 768px) {
+    .navbar-container {
+      padding: 0 10px;
+    }
+    
+    .home-link h1 {
+      font-size: 20px;
+    }
+    
+    .logo {
+      width: 60px;
+    }
+  }

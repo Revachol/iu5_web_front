@@ -1,0 +1,25 @@
+/* modules/SearchForm.css */
+.search-form {
+  width: 100%;
+}
+
+.search-input {
+  font-family: "Jost", sans-serif;
+  font-size: 1rem;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  padding: 10px 15px;
+}
+
+.search-input:focus {
+  box-shadow: 0 0 0 0.2rem rgba(50, 50, 50, 0.25);
+  border-color: #323232;
+}
+
+.search-icon {
+  background-color: transparent;
+  border: 1px solid #ccc;
+  border-left: none;
+  border-radius: 0 20px 20px 0;
+  cursor: pointer;
+}
