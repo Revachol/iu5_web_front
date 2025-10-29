@@ -1,8 +1,8 @@
-// modules/HOCard
+// modules/ObjectCard.tsx
 import React from 'react';
 import { Card, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import type { HistoricalObject } from '../modules/mockData';
+import type { HistoricalObject } from '../services/apiService';
 import './HOCard.css';
 
 interface ObjectCardProps {
@@ -13,14 +13,26 @@ interface ObjectCardProps {
 const ObjectCard: React.FC<ObjectCardProps> = ({ object, onAddToCart }) => {
   const navigate = useNavigate();
 
+  // Форматируем заголовок
+  const getFullTitle = (obj: HistoricalObject): string => {
+    return `${obj.Name} (${obj.HistoricalRegion})`;
+  };
+
+  // Форматируем цену
+  const formatPrice = (price: number): string => {
+    return `$${price.toFixed(2)}`;
+  };
+
   return (
     <Card className="object-card">
-      <div className="card-image-container">
+      <div
+        className="card-image-container"
+        onClick={() => navigate(`/historical_object/${object.ID}`)} // Navigate on image click
+      >
         <Card.Img 
           variant="top" 
-          src={object.Img}
+          src={object.ImageURL}
           className="object-image"
-          onClick={() => navigate(`/historical_object/${object.ID}`)}
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             target.src = 'http://localhost:9000/iu5-web/img/placeholder-historical.jpg';
@@ -29,19 +41,13 @@ const ObjectCard: React.FC<ObjectCardProps> = ({ object, onAddToCart }) => {
       </div>
       <Card.Body className="card-body">
         <div className="price-section">
-          <span className="price">{object.Price}</span>
-          <span className="value"> / {object.Value}</span>
+          <span className="price">{formatPrice(object.PriceUSD)}</span>
+          <span className="value"> / {object.Unit}</span>
         </div>
-        <Card.Title className="object-title">{object.Title}</Card.Title>
-        {/* <Card.Text className="object-description">
-          {object.Description.length > 120 
-            ? `${object.Description.substring(0, 120)}...` 
-            : object.Description
-          }
-        </Card.Text> */}
-        {/* <div className="source-info">
-          <small className="text-muted">Источник: {object.Source}</small>
-        </div> */}
+        <Card.Title className="object-title">{getFullTitle(object)}</Card.Title>
+        <div className="object-meta">
+          <small className="text-muted">Год: {object.HistoricalPeriod}</small>
+        </div>
         <div className="card-buttons">
           <Button
             variant="outline-dark"

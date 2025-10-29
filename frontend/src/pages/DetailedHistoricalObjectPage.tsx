@@ -1,24 +1,52 @@
 // pages/DetailedHistoricalObjectPage.tsx
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Button, Card } from 'react-bootstrap';
-import { historicalObjects, type HistoricalObject } from '../modules/mockData';
+import { Container, Row, Col, Button, Card, Spinner, Alert } from 'react-bootstrap';
+import { useHistoricalObject } from '../hooks/useHistoricalObject'; // правильный импорт
 import './DetailedHistoricalObjectPage.css';
 
 const DetailedHistoricalObjectPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const objectId = parseInt(id || '0');
   
-  // Находим объект по ID
-  const object: HistoricalObject | undefined = historicalObjects.find(
-    obj => obj.ID === parseInt(id || '0')
-  );
+  // Используем хук для одного объекта
+  const { object, loading, error } = useHistoricalObject(objectId);
 
-  // Если объект не найден
-  if (!object) {
+  const handleAddToCart = () => {
+    if (object) {
+      console.log(`Added object ${object.ID} to cart`);
+      // TODO: Реализовать добавление в корзину
+    }
+  };
+
+  const handleBack = () => {
+    navigate('/historical_objects');
+  };
+
+  if (loading) {
     return (
       <div className="detailed-object-page">
         <Container>
+          <div className="loading-spinner">
+            <Spinner animation="border" role="status">
+              <span className="visually-hidden">Загрузка...</span>
+            </Spinner>
+            <p>Загрузка информации об объекте...</p>
+          </div>
+        </Container>
+      </div>
+    );
+  }
+
+  if (error || !object) {
+    return (
+      <div className="detailed-object-page">
+        <Container>
+          <Alert variant="warning" className="mb-3">
+            <p>{error || 'Объект не найден'}</p>
+            <p className="mb-0">Используются демонстрационные данные</p>
+          </Alert>
           <div className="not-found">
             <h2>Объект не найден</h2>
             <Button 
@@ -32,15 +60,6 @@ const DetailedHistoricalObjectPage: React.FC = () => {
       </div>
     );
   }
-
-  const handleAddToCart = () => {
-    console.log(`Added object ${object.ID} to cart`);
-    // TODO: Реализовать добавление в корзину
-  };
-
-  const handleBack = () => {
-    navigate('/historical_objects');
-  };
 
   return (
     <div className="detailed-object-page">
@@ -64,7 +83,7 @@ const DetailedHistoricalObjectPage: React.FC = () => {
             <Card className="object-image-card">
               <Card.Img 
                 variant="top" 
-                src={object.Img}
+                src={object.ImageURL}
                 className="detailed-object-image"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
@@ -76,11 +95,11 @@ const DetailedHistoricalObjectPage: React.FC = () => {
           
           <Col lg={6} className="info-section">
             <div className="object-info">
-              <h1 className="object-title">{object.Title}</h1>
+              <h1 className="object-title">{object.Name}</h1>
               
               <div className="price-section">
-                <span className="price">{object.Price}</span>
-                <span className="value"> / {object.Value}</span>
+                <span className="price">${object.PriceUSD.toFixed(2)}</span>
+                <span className="value"> / {object.Unit}</span>
               </div>
 
               <div className="description-section">
@@ -90,14 +109,32 @@ const DetailedHistoricalObjectPage: React.FC = () => {
 
               <div className="source-section">
                 <h3 className="section-title">Исторический источник</h3>
-                <p className="object-source">{object.Source}</p>
+                <p className="object-source">{object.DataSource}</p>
+              </div>
+
+              <div className="action-buttons">
+                <Button
+                  variant="outline-dark"
+                  size="lg"
+                  className="detail-btn"
+                >
+                  📖 Подробная справка
+                </Button>
+                <Button
+                  variant="dark"
+                  size="lg"
+                  className="buy-btn"
+                  onClick={handleAddToCart}
+                >
+                  🛒 Добавить в заявку
+                </Button>
               </div>
             </div>
           </Col>
         </Row>
 
-        {/* Дополнительная информация (можно расширить) */}
-        {/* <Row className="additional-info">
+        {/* Дополнительная информация */}
+        <Row className="additional-info">
           <Col lg={12}>
             <Card className="info-card">
               <Card.Body>
@@ -105,18 +142,20 @@ const DetailedHistoricalObjectPage: React.FC = () => {
                 <Row>
                   <Col md={6}>
                     <div className="info-item">
-                      <strong>Эпоха:</strong> 
-                      <span> {object.Title.match(/\((.*?)\)/)?.[1] || 'Не указана'}</span>
+                      <strong>Исторический период:</strong> 
+                      <span> {object.HistoricalPeriod}</span>
                     </div>
                     <div className="info-item">
-                      <strong>Категория:</strong> 
-                      <span> Исторический артефакт</span>
+                      <strong>Регион:</strong> 
+                      <span> {object.HistoricalRegion}</span>
                     </div>
                   </Col>
                   <Col md={6}>
                     <div className="info-item">
-                      <strong>Доступность:</strong> 
-                      <span className="available"> ✓ В наличии</span>
+                      <strong>Статус:</strong> 
+                      <span className={object.IsActive ? "available" : "unavailable"}>
+                        {object.IsActive ? " ✓ Доступен" : " ✗ Не доступен"}
+                      </span>
                     </div>
                     <div className="info-item">
                       <strong>ID объекта:</strong> 
@@ -127,7 +166,7 @@ const DetailedHistoricalObjectPage: React.FC = () => {
               </Card.Body>
             </Card>
           </Col>
-        </Row> */}
+        </Row>
       </Container>
     </div>
   );
