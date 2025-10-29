@@ -4,6 +4,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button, Card, Spinner, Alert } from 'react-bootstrap';
 import { useHistoricalObject } from '../hooks/useHistoricalObject'; // правильный импорт
 import './DetailedHistoricalObjectPage.css';
+import Breadcrumbs from '../modules/Breadcrumbs';
+import type { BreadcrumbItem } from '../types';
 
 const DetailedHistoricalObjectPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -12,6 +14,12 @@ const DetailedHistoricalObjectPage: React.FC = () => {
   
   // Используем хук для одного объекта
   const { object, loading, error } = useHistoricalObject(objectId);
+
+  const breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Главная', path: '/' },
+    { label: 'Каталог исторических объектов', path: '/historical_objects' },
+    { label: object ? object.Name : 'Загрузка...' }
+  ];
 
   const handleAddToCart = () => {
     if (object) {
@@ -64,6 +72,11 @@ const DetailedHistoricalObjectPage: React.FC = () => {
   return (
     <div className="detailed-object-page">
       <Container className="object-container">
+      <Row>
+          <Col>
+            <Breadcrumbs items={breadcrumbItems} />
+          </Col>
+        </Row>
         {/* Кнопка назад */}
         <Row>
           <Col>
@@ -112,7 +125,7 @@ const DetailedHistoricalObjectPage: React.FC = () => {
                 <p className="object-source">{object.DataSource}</p>
               </div>
 
-              <div className="action-buttons">
+              {/* <div className="action-buttons">
                 <Button
                   variant="outline-dark"
                   size="lg"
@@ -128,12 +141,12 @@ const DetailedHistoricalObjectPage: React.FC = () => {
                 >
                   🛒 Добавить в заявку
                 </Button>
-              </div>
+              </div> */}
             </div>
           </Col>
         </Row>
 
-        {/* Дополнительная информация */}
+        {/* Дополнительная информация
         <Row className="additional-info">
           <Col lg={12}>
             <Card className="info-card">
@@ -166,7 +179,7 @@ const DetailedHistoricalObjectPage: React.FC = () => {
               </Card.Body>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
       </Container>
     </div>
   );

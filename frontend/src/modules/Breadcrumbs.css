@@ -1,0 +1,32 @@
+/* components/Breadcrumbs.css */
+.custom-breadcrumb {
+    font-family: "Jost", sans-serif;
+    background: transparent;
+    padding: 0;
+    margin-bottom: 20px;
+  }
+  
+  .custom-breadcrumb .breadcrumb-item {
+    font-size: 0.9rem;
+  }
+  
+  .custom-breadcrumb .breadcrumb-item a {
+    color: #323232;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .custom-breadcrumb .breadcrumb-item a:hover {
+    color: #505050;
+    text-decoration: underline;
+  }
+  
+  .custom-breadcrumb .breadcrumb-item.active {
+    color: #6d6d6d;
+    font-weight: 500;
+  }
+  
+  .custom-breadcrumb .breadcrumb-item + .breadcrumb-item::before {
+    color: #6d6d6d;
+    content: ">";
+  }
