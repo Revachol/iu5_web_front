@@ -256,3 +256,20 @@
       margin-bottom: 5px;
     }
   }
+
+  /* Добавить в соответствующие CSS файлы */
+.loading-spinner {
+    text-align: center;
+    padding: 60px 20px;
+  }
+  
+.loading-spinner p {
+margin-top: 20px;
+font-family: "Jost", sans-serif;
+color: #6d6d6d;
+}
+
+.unavailable {
+color: #dc3545 !important;
+font-weight: bold;
+}

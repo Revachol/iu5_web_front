@@ -17,6 +17,7 @@
 .card-image-container {
   height: 396px;
   overflow: hidden;
+  cursor: pointer; /* Add pointer cursor for clickable image */
 }
 
 .object-image {
@@ -64,9 +65,10 @@
 }
 
 .card-buttons {
-  display: flex;
+  /* display: flex; */
   gap: 10px;
   margin-top: auto;
+  flex-direction: row; /* Ensure buttons stay side by side */
 }
 
 .detail-btn, .buy-btn {
@@ -75,6 +77,7 @@
   padding: 8px 16px;
   border-radius: 5px;
   flex: 1;
+width: 50%;
   transition: all 0.3s ease;
 }
 
