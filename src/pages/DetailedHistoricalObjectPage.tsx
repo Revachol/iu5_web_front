@@ -21,12 +21,12 @@ const DetailedHistoricalObjectPage: React.FC = () => {
     { label: object ? object.Name : 'Загрузка...' }
   ];
 
-  const handleAddToCart = () => {
-    if (object) {
-      console.log(`Added object ${object.ID} to cart`);
-      // TODO: Реализовать добавление в корзину
-    }
-  };
+  // const handleAddToCart = () => {
+  //   if (object) {
+  //     console.log(`Added object ${object.ID} to cart`);
+  //     // TODO: Реализовать добавление в корзину
+  //   }
+  // };
 
   const handleBack = () => {
     navigate('/historical_objects');

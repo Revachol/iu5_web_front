@@ -1,0 +1,92 @@
+/* components/BasketIcon.css */
+.basket-container {
+    position: fixed;
+    bottom: 50px;
+    left: 20px;
+    z-index: 1000;
+    transition: all 0.3s ease;
+  }
+  
+  .basket-icon {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .basket-icon:hover {
+    transform: scale(1.1);
+  }
+  
+  .basket-image {
+    width: 60px;
+    height: 60px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  }
+  
+  .basket-counter {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ff4444;
+    color: white;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: "Jost", sans-serif;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    animation: pulse 2s infinite;
+  }
+  
+  .basket-inactive .basket-image {
+    opacity: 0.5;
+    filter: grayscale(100%);
+  }
+  
+  .basket-inactive .basket-counter {
+    background-color: #999;
+  }
+  
+  .basket-inactive .basket-icon {
+    cursor: not-allowed;
+  }
+  
+  .basket-inactive .basket-icon:hover {
+    transform: none;
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  /* Адаптивность для мобильных устройств */
+  @media (max-width: 768px) {
+    .basket-container {
+      bottom: 20px;
+      left: 15px;
+    }
+    
+    .basket-image {
+      width: 50px;
+      height: 50px;
+    }
+    
+    .basket-counter {
+      width: 20px;
+      height: 20px;
+      font-size: 12px;
+    }
+  }

@@ -89,3 +89,66 @@ color: #6d6d6d;
 color: #dc3545 !important;
 font-weight: bold;
 }
+/* pages/HistoricalObjectsPage.css */
+.historical-objects-page {
+    background-color: #e4e4e4;
+    min-height: calc(100vh - 70px);
+    padding: 40px 0;
+    position: relative; /* Для позиционирования корзины */
+  }
+  
+  .objects-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Остальные стили остаются без изменений */
+  .page-header {
+    margin-bottom: 40px;
+    align-items: center;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  
+  .objects-grid {
+    margin: 0 -15px;
+    background: transparent;
+  }
+  
+  .objects-count {
+    font-family: "Jost", sans-serif;
+    color: #6d6d6d;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .no-results {
+    padding: 60px 20px;
+    text-align: center;
+  }
+  
+  .no-results h3 {
+    font-family: "Jost", sans-serif;
+    color: #323232;
+    margin-bottom: 15px;
+  }
+  
+  .no-results p {
+    font-family: "Jost", sans-serif;
+    color: #6d6d6d;
+    font-size: 1.1rem;
+  }
+  
+  .loading-spinner {
+    text-align: center;
+    padding: 60px 20px;
+  }
+  
+  .loading-spinner p {
+    margin-top: 20px;
+    font-family: "Jost", sans-serif;
+    color: #6d6d6d;
+  }

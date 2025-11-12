@@ -1,6 +1,6 @@
 // App.tsx
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import CustomNavbar from './modules/Navbar';
 import HomePage from './pages/HomePage';
@@ -11,7 +11,7 @@ import './App.css';
 
 const App: React.FC = () => {
   return (
-    <Router>
+    <BrowserRouter basename='/iu5_web_front'>
       <div className="App">
         <CustomNavbar />
         <div style={{ paddingTop: '70px' }}>
@@ -32,7 +32,7 @@ const App: React.FC = () => {
           </Routes>
         </div>
       </div>
-    </Router>
+    </BrowserRouter>
   );
 };
 
