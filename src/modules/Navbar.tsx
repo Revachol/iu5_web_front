@@ -2,6 +2,7 @@
 import React from 'react';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import logo from '../assets/logo.svg';
 import './Navbar.css';
 
 const CustomNavbar: React.FC = () => {
@@ -23,7 +24,7 @@ const CustomNavbar: React.FC = () => {
         {/* Логотип по центру */}
         <Navbar.Brand className="logo-center">
           <img
-            src="images/mock/logo.svg"
+            src={logo}
             width="80"
             height="45"
             className="logo"

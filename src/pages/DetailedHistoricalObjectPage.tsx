@@ -100,7 +100,7 @@ const DetailedHistoricalObjectPage: React.FC = () => {
                 className="detailed-object-image"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
-                  target.src = 'http://localhost:9000/iu5-web/img/placeholder-historical.jpg';
+                  target.src = '/images/mock/logo.svg';
                 }}
               />
             </Card>

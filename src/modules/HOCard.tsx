@@ -4,6 +4,7 @@ import { Card, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import type { HistoricalObject } from '../services/apiService';
 import './HOCard.css';
+import logo from '../assets/logo.svg';
 
 interface ObjectCardProps {
   object: HistoricalObject;
@@ -35,7 +36,7 @@ const ObjectCard: React.FC<ObjectCardProps> = ({ object, onAddToCart }) => {
           className="object-image"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
-            target.src = 'http://localhost:9000/iu5-web/img/placeholder-historical.jpg';
+            target.src = logo;
           }}
         />
       </div>

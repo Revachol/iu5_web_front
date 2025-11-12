@@ -11,7 +11,7 @@ export const mockHistoricalObjects: HistoricalObject[] = [
     HistoricalPeriod: "1890",
     HistoricalRegion: "Российская Империя",
     DataSource: "«Справочник московского архитектора и инженера», 1895 г.",
-    ImageURL: "http://localhost:9000/iu5-web/img/object_1.jpg",
+    ImageURL: "images/mock/object_1.jpg",
     IsActive: true,
     CreatedAt: "2025-09-30T13:37:56.519557Z"
   },
@@ -24,7 +24,7 @@ export const mockHistoricalObjects: HistoricalObject[] = [
     HistoricalPeriod: "2000",
     HistoricalRegion: "Средневековая Франция",
     DataSource: "Счетные книги Собора Нотр-Дам де Пари (фрагменты), XIII век.",
-    ImageURL: "http://localhost:9000/iu5-web/img/object_2.jpg",
+    ImageURL: "images/mock/object_2.jpg",
     IsActive: true,
     CreatedAt: "2025-09-30T13:37:56.519557Z"
   },
@@ -37,7 +37,7 @@ export const mockHistoricalObjects: HistoricalObject[] = [
     HistoricalPeriod: "1850",
     HistoricalRegion: "Викторианская Англия",
     DataSource: "Отчет Британского Министерства труда по заработной плате в строительстве, 1850 г.",
-    ImageURL: "http://localhost:9000/iu5-web/img/object_3.jpg",
+    ImageURL: "images/mock//object_3.jpg",
     IsActive: true,
     CreatedAt: "2025-09-30T13:37:56.519557Z"
   },
@@ -50,7 +50,7 @@ export const mockHistoricalObjects: HistoricalObject[] = [
     HistoricalPeriod: "434-432 до н.э.",
     HistoricalRegion: "Древняя Греция",
     DataSource: "Строительные надписи (Афинский акрополь, учетные записи сметы Парфенона), ок. 434-432 гг. до н.э.",
-    ImageURL: "http://localhost:9000/iu5-web/img/object_4.jpg",
+    ImageURL: "images/mock//object_4.jpg",
     IsActive: true,
     CreatedAt: "2025-09-30T13:37:56.519557Z"
   },
@@ -63,7 +63,7 @@ export const mockHistoricalObjects: HistoricalObject[] = [
     HistoricalPeriod: "1656",
     HistoricalRegion: "Нидерланды, Золотой век",
     DataSource: "Опись имущества и счетные книги мастерской Рембрандта ван Рейна, Амстердам, 1656 г.",
-    ImageURL: "http://localhost:9000/iu5-web/img/object_5.png",
+    ImageURL: "images/mock//object_5.png",
     IsActive: true,
     CreatedAt: "2025-09-30T13:37:56.519557Z"
   },
@@ -76,7 +76,7 @@ export const mockHistoricalObjects: HistoricalObject[] = [
     HistoricalPeriod: "1932",
     HistoricalRegion: "США, Великая Депрессия",
     DataSource: "Статистика заработной платы Бюро трудовой статистики США (U.S. BLS), 1932 г.",
-    ImageURL: "http://localhost:9000/iu5-web/img/object_6.jpg",
+    ImageURL: "images/mock//object_6.jpg",
     IsActive: true,
     CreatedAt: "2025-09-30T13:37:56.519557Z"
   }
