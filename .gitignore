@@ -27,3 +27,7 @@ chrome-user-data
 .env
 .vite
 .node_modules
+ca.key
+cert.key
+ca.crt
+cert.crt
