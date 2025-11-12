@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { type HistoricalObject, apiService } from '../services/apiService';
 import { mockHistoricalObjects } from '../services/mockData';
 
-export const useHistoricalObjects = () => {
+export const useHistoricalObjects = (searchTerm?: string) => {
   const [objects, setObjects] = useState<HistoricalObject[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -15,9 +15,11 @@ export const useHistoricalObjects = () => {
         setLoading(true);
         setError(null);
         setUsingMockData(false);
-        console.log('🔄 Loading historical objects...');
+        console.log('🔄 Loading historical objects...', searchTerm ? `with search: "${searchTerm}"` : '');
         
-        const data = await apiService.getHistoricalObjects();
+        // Передаем параметры поиска в API
+        const filters = searchTerm ? { name: searchTerm } : {};
+        const data = await apiService.getHistoricalObjects(filters);
         console.log('✅ Objects loaded successfully:', data);
         console.log('✅ Objects count:', data.length);
         
@@ -39,14 +41,24 @@ export const useHistoricalObjects = () => {
         console.error('❌ Load error:', err);
         setError(errorMessage);
         setUsingMockData(true);
-        setObjects(mockHistoricalObjects);
+        
+        // При использовании моков фильтруем данные локально
+        let filteredMockData = mockHistoricalObjects;
+        if (searchTerm) {
+          filteredMockData = mockHistoricalObjects.filter(obj =>
+            obj.Name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            obj.Description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            obj.HistoricalRegion?.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+        }
+        setObjects(filteredMockData);
       } finally {
         setLoading(false);
       }
     };
 
     loadObjects();
-  }, []);
+  }, [searchTerm]); // Добавляем searchTerm в зависимости
 
   return { objects, loading, error, usingMockData };
 };
