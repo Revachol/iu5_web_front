@@ -1,6 +1,4 @@
 // services/apiService.ts
-import { mockHistoricalObjects } from './mockData';
-
 export interface HistoricalObject {
   ID: number;
   Name: string;
@@ -15,94 +13,73 @@ export interface HistoricalObject {
   CreatedAt: string;
 }
 
-export interface HOFilters {
-  name?: string;
-}
-
 class ApiService {
-  async getHistoricalObjects(filters: HOFilters = {}): Promise<HistoricalObject[]> {
+  private baseURL: string;
+
+  constructor() {
+    // Получаем IP из localStorage или используем дефолтный
+    const savedIP = localStorage.getItem('api_ip') || '192.168.1.100:8000';
+    this.baseURL = `http://${savedIP}/api`;
+  }
+
+  setIPAddress(ip: string) {
+    localStorage.setItem('api_ip', ip);
+    this.baseURL = `http://${ip}/api`;
+  }
+
+  async getHistoricalObjects(searchTerm?: string): Promise<HistoricalObject[]> {
     try {
-      console.log('📥 Fetching historical objects from API...', filters);
-      
-      // Создаем URL с параметрами фильтрации
-      const url = new URL('/api/historical_objects', window.location.origin);
-      
-      if (filters.name) {
-        url.searchParams.append('name', filters.name);
+      let url = `${this.baseURL}/historical_objects`;
+      if (searchTerm) {
+        url += `?name=${encodeURIComponent(searchTerm)}`;
       }
+
+      console.log('📡 Fetching from:', url);
       
-      console.log('🔵 Fetching from URL:', url.toString());
-      const response = await fetch(url.toString());
-      
-      console.log('🔵 Response status:', response.status);
-      console.log('🔵 Response ok:', response.ok);
-      
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       const data = await response.json();
-      console.log('🟢 API response received:', data);
-      
-      // Извлекаем массив объектов из поля historical_objects
-      const historicalObjects = data.historical_objects || data.data || data.items || [];
-      
-      console.log('🟢 Extracted historical objects:', historicalObjects);
-      console.log('🟢 Number of objects from API:', historicalObjects.length);
-      
-      // Гарантируем, что возвращаем массив
-      return Array.isArray(historicalObjects) ? historicalObjects : [];
+      return data.historical_objects || data.data || data.items || [];
       
     } catch (error) {
-      console.error('❌ Error fetching from API, using mock data:', error);
-      console.log('🟠 Returning mock data with', mockHistoricalObjects.length, 'objects');
-      
-      // При использовании моков фильтруем данные локально
-      return this.getMockHistoricalObjects(filters);
+      console.error('❌ API Error:', error);
+      throw error;
     }
   }
 
   async getHistoricalObject(id: number): Promise<HistoricalObject> {
     try {
-      console.log(`📥 Fetching historical object ${id} from API...`);
-      const response = await fetch(`/api/historical_object/${id}`);
-      
-      console.log('🔵 Response status:', response.status);
+      const response = await fetch(`${this.baseURL}/historical_object/${id}`);
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       const data = await response.json();
-      console.log('🟢 API object response:', data);
+      return data.historical_object || data.data || data;
       
-      // Извлекаем объект из ответа (может быть напрямую объект или в поле)
-      const historicalObject = data.historical_object || data.data || data;
-      
-      return historicalObject;
     } catch (error) {
-      console.error(`❌ Error fetching object ${id} from API, using mock:`, error);
-      const mockObject = mockHistoricalObjects.find(obj => obj.ID === id) || mockHistoricalObjects[0];
-      console.log('🟠 Returning mock object:', mockObject);
-      return mockObject;
+      console.error(`❌ Error fetching object ${id}:`, error);
+      throw error;
     }
   }
 
-  // Метод для фильтрации моковых данных
-  private getMockHistoricalObjects(filters: HOFilters = {}): HistoricalObject[] {
-    let filteredData = mockHistoricalObjects;
-
-    if (filters.name) {
-      const searchTerm = filters.name.toLowerCase();
-      filteredData = mockHistoricalObjects.filter(obj =>
-        obj.Name?.toLowerCase().includes(searchTerm) ||
-        obj.Description?.toLowerCase().includes(searchTerm) ||
-        obj.HistoricalRegion?.toLowerCase().includes(searchTerm)
-      );
+  async testConnection(): Promise<boolean> {
+    try {
+      const response = await fetch(`${this.baseURL}/historical_objects`);
+      return response.ok;
+    } catch (error) {
+      return false;
     }
-
-    console.log('🟠 Filtered mock data:', filteredData.length, 'objects');
-    return filteredData;
   }
 }
 

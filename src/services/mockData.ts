@@ -11,7 +11,7 @@ export const mockHistoricalObjects: HistoricalObject[] = [
     HistoricalPeriod: "1890",
     HistoricalRegion: "Российская Империя",
     DataSource: "«Справочник московского архитектора и инженера», 1895 г.",
-    ImageURL: "http://localhost:9000/iu5-web/img/object_1.jpg",
+    ImageURL: "http://46.39.244.31:9000/iu5-web/img/object_1.jpg",
     IsActive: true,
     CreatedAt: "2025-09-30T13:37:56.519557Z"
   },

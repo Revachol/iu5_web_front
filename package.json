@@ -5,11 +5,14 @@
   "type": "module",
   "proxy": "http://127.0.0.1:80",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "dev": "vite --port 3000",
+    "dev:tauri": "vite --config vite.config.tauri.ts",
+    "build": "vite build",
+    "build:tauri": "vite build --config vite.config.tauri.ts",
     "preview": "vite preview",
-    "deploy": "gh-pages -d dist"
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.10.1",

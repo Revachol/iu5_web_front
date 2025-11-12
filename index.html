@@ -2,27 +2,31 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/assets/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.webmanifest">
-
-    <!-- Apple-specific meta tags -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Helix">
-    
-    <!-- Apple Touch Icons -->
-    <link rel="apple-touch-icon" href="flask-icon-180.png">
-    <link rel="apple-touch-startup-image" href="flask-icon-180.png">
-    
-    <!-- Theme Color -->
-    <meta name="theme-color" content="#171A20">
-    <meta name="msapplication-TileColor" content="#171A20">
-    <title>History</title>
+    <title>Historical Objects Viewer</title>
+    <style>
+      /* Временные inline стили пока не загружается CSS */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background-color: #f5f5f5;
+      }
+      #root {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div style="text-align: center; padding: 40px;">
+        <h1>Загрузка...</h1>
+        <p>Historical Objects Viewer</p>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
