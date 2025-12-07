@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
+  base: './', // Относительные пути для Tauri
   server: {
     port: 1420,
     strictPort: true,
