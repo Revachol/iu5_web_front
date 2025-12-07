@@ -5,11 +5,17 @@ import ObjectCard from '../modules/HOCard';
 import SearchForm from '../modules/SearchForm';
 import BasketIcon from '../modules/Basket';
 import { useHistoricalObjects } from '../hooks/useHistoricalObjects';
+import { useSearchInput, useAppliedSearch } from '../slices/searchSlice';
+import { useFiltersData } from '../hooks/useSearchData';
 import './HistoricalObjectsPage.css';
 
 const HistoricalObjectsPage: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const { objects, loading, usingMockData } = useHistoricalObjects();
+  // Используем Redux для управления состоянием поиска
+  const searchInput = useSearchInput();
+  const appliedSearch = useAppliedSearch();
+  const { setSearchInput, applySearch } = useFiltersData();
+  
+  const { objects, loading, usingMockData } = useHistoricalObjects(appliedSearch);
 
   // Временное состояние для корзины (пока неактивна)
   const [basketItems] = useState<number[]>([]);
@@ -18,11 +24,18 @@ const HistoricalObjectsPage: React.FC = () => {
   const filteredObjects = Array.isArray(objects) 
     ? objects.filter(obj => {
         if (!obj || typeof obj !== 'object') return false;
-        return (
-          obj.Name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          obj.Description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          obj.HistoricalRegion?.toLowerCase().includes(searchTerm.toLowerCase())
-        );
+        
+        // Если применен поиск, фильтруем по appliedSearch
+        if (appliedSearch) {
+          return (
+            obj.Name?.toLowerCase().includes(appliedSearch.toLowerCase()) ||
+            obj.Description?.toLowerCase().includes(appliedSearch.toLowerCase()) ||
+            obj.HistoricalRegion?.toLowerCase().includes(appliedSearch.toLowerCase())
+          );
+        }
+        
+        // Если поиск не применен, показываем все объекты
+        return true;
       })
     : [];
 
@@ -30,6 +43,14 @@ const HistoricalObjectsPage: React.FC = () => {
     console.log(`Added object ${objectId} to cart`);
     // TODO: Реализовать добавление в корзину
     // Пока просто логируем действие
+  };
+
+  const handleSearchChange = (value: string) => {
+    setSearchInput(value);
+  };
+
+  const handleSearchApply = () => {
+    applySearch();
   };
 
   if (loading) {
@@ -67,12 +88,35 @@ const HistoricalObjectsPage: React.FC = () => {
           </Col>
           <Col lg={4}>
             <SearchForm
-              searchTerm={searchTerm}
-              onSearchChange={setSearchTerm}
+              searchTerm={searchInput}
+              onSearchChange={handleSearchChange}
+              onSearchApply={handleSearchApply}
               placeholder="Поиск исторических объектов..."
             />
           </Col>
         </Row>
+
+        {/* Показываем примененный поисковый запрос */}
+        {appliedSearch && (
+          <Row className="mb-2">
+            <Col>
+              <div className="applied-search-info">
+                <small className="text-muted">
+                  Поиск: "<strong>{appliedSearch}</strong>"
+                  <button 
+                    className="btn btn-sm btn-link text-muted p-0 ms-2"
+                    onClick={() => {
+                      setSearchInput('');
+                      applySearch(); // Применяем пустой поиск чтобы сбросить
+                    }}
+                  >
+                    × очистить
+                  </button>
+                </small>
+              </div>
+            </Col>
+          </Row>
+        )}
 
         {/* Предупреждение об использовании моков */}
         {usingMockData && (
@@ -85,15 +129,6 @@ const HistoricalObjectsPage: React.FC = () => {
             </Col>
           </Row>
         )}
-
-        {/* Информация о количестве объектов */}
-        <Row className="mb-3">
-          <Col>
-            <p className="objects-count">
-              Найдено объектов: {filteredObjects.length}
-            </p>
-          </Col>
-        </Row>
 
         {/* Сетка объектов */}
         <Row className="objects-grid">

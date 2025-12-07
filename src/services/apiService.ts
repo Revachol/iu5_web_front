@@ -15,11 +15,24 @@ export interface HistoricalObject {
   CreatedAt: string;
 }
 
+export interface HOFilters {
+  name?: string;
+}
+
 class ApiService {
-  async getHistoricalObjects(): Promise<HistoricalObject[]> {
+  async getHistoricalObjects(filters: HOFilters = {}): Promise<HistoricalObject[]> {
     try {
-      console.log('📥 Fetching historical objects from API...');
-      const response = await fetch('/api/historical_objects');
+      console.log('📥 Fetching historical objects from API...', filters);
+      
+      // Создаем URL с параметрами фильтрации
+      const url = new URL('/api/historical_objects', window.location.origin);
+      
+      if (filters.name) {
+        url.searchParams.append('name', filters.name);
+      }
+      
+      console.log('🔵 Fetching from URL:', url.toString());
+      const response = await fetch(url.toString());
       
       console.log('🔵 Response status:', response.status);
       console.log('🔵 Response ok:', response.ok);
@@ -43,7 +56,9 @@ class ApiService {
     } catch (error) {
       console.error('❌ Error fetching from API, using mock data:', error);
       console.log('🟠 Returning mock data with', mockHistoricalObjects.length, 'objects');
-      return mockHistoricalObjects;
+      
+      // При использовании моков фильтруем данные локально
+      return this.getMockHistoricalObjects(filters);
     }
   }
 
@@ -71,6 +86,23 @@ class ApiService {
       console.log('🟠 Returning mock object:', mockObject);
       return mockObject;
     }
+  }
+
+  // Метод для фильтрации моковых данных
+  private getMockHistoricalObjects(filters: HOFilters = {}): HistoricalObject[] {
+    let filteredData = mockHistoricalObjects;
+
+    if (filters.name) {
+      const searchTerm = filters.name.toLowerCase();
+      filteredData = mockHistoricalObjects.filter(obj =>
+        obj.Name?.toLowerCase().includes(searchTerm) ||
+        obj.Description?.toLowerCase().includes(searchTerm) ||
+        obj.HistoricalRegion?.toLowerCase().includes(searchTerm)
+      );
+    }
+
+    console.log('🟠 Filtered mock data:', filteredData.length, 'objects');
+    return filteredData;
   }
 }
 
