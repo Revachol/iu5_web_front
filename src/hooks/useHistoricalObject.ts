@@ -1,6 +1,10 @@
 // hooks/useHistoricalObject.ts
 import { useState, useEffect } from 'react';
-import { type HistoricalObject, apiService } from '../services/apiService';
+import type { HistoricalObject } from '../services/apiService';
+import { apiService } from '../services/apiService';
+
+console.log('🔍 [useHistoricalObject.ts] Module loaded');
+console.log('🔍 [useHistoricalObject.ts] apiService:', apiService);
 
 export const useHistoricalObject = (objectId: number) => {
   const [object, setObject] = useState<HistoricalObject | null>(null);

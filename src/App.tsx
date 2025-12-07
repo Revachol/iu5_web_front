@@ -7,6 +7,8 @@ import DetailedHistoricalObjectPage from './pages/DetailedHistoricalObjectPage';
 import IPConfig from './modules/IPConfig';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+console.log('🔍 [App.tsx] Module loaded - all imports successful');
+
 const App: React.FC = () => {
   const [showIPConfig, setShowIPConfig] = useState(false);
 

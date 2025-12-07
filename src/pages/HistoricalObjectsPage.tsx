@@ -3,6 +3,8 @@ import { Container, Row, Col, Spinner, Alert, Card, Badge } from 'react-bootstra
 import { useHistoricalObjects } from '../hooks/useHistoricalObjects';
 import { Link } from 'react-router-dom';
 
+console.log('🔍 [HistoricalObjectsPage.tsx] Module loaded');
+
 const HistoricalObjectsPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [appliedSearch, setAppliedSearch] = useState('');

@@ -13,7 +13,7 @@ const IPConfig: React.FC<IPConfigProps> = ({ show, onHide }) => {
   const [testResult, setTestResult] = useState<'success' | 'error' | null>(null);
 
   useEffect(() => {
-    const savedIP = localStorage.getItem('api_ip') || '192.168.1.100:8000';
+    const savedIP = localStorage.getItem('api_ip') || 'localhost:80';
     setIp(savedIP);
   }, []);
 
@@ -42,7 +42,7 @@ const IPConfig: React.FC<IPConfigProps> = ({ show, onHide }) => {
             <Form.Label>IP адрес сервера (с портом)</Form.Label>
             <Form.Control
               type="text"
-              placeholder="192.168.1.100:8000"
+              placeholder="localhost:80"
               value={ip}
               onChange={(e) => setIp(e.target.value)}
             />

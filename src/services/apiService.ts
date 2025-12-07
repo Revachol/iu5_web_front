@@ -1,4 +1,6 @@
 // services/apiService.ts
+console.log('🔍 [apiService.ts] Module loading...');
+
 export interface HistoricalObject {
   ID: number;
   Name: string;
@@ -13,13 +15,26 @@ export interface HistoricalObject {
   CreatedAt: string;
 }
 
-class ApiService {
+console.log('🔍 [apiService.ts] HistoricalObject interface defined');
+
+export class ApiService {
   private baseURL: string;
 
   constructor() {
+    // Проверяем версию конфигурации и сбрасываем старый IP если нужно
+    const configVersion = localStorage.getItem('api_config_version');
+    const currentVersion = '2.0'; // Увеличиваем версию для сброса старых настроек
+    
+    if (configVersion !== currentVersion) {
+      console.log('🔄 Обновление конфигурации API...');
+      localStorage.setItem('api_config_version', currentVersion);
+      localStorage.setItem('api_ip', 'localhost:80');
+    }
+    
     // Получаем IP из localStorage или используем дефолтный
-    const savedIP = localStorage.getItem('api_ip') || '192.168.1.100:8000';
+    const savedIP = localStorage.getItem('api_ip') || 'localhost:80';
     this.baseURL = `http://${savedIP}/api`;
+    console.log('🌐 API Base URL:', this.baseURL);
   }
 
   setIPAddress(ip: string) {
@@ -83,4 +98,9 @@ class ApiService {
   }
 }
 
+console.log('🔍 [apiService.ts] ApiService class defined');
+
 export const apiService = new ApiService();
+
+console.log('🔍 [apiService.ts] apiService instance created:', apiService);
+console.log('🔍 [apiService.ts] Module loaded successfully!');

@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
-import { HistoricalObject, apiService } from '../services/apiService';
+import type { HistoricalObject } from '../services/apiService';
+import { apiService } from '../services/apiService';
+
+console.log('🔍 [useHistoricalObjects.ts] Module loaded');
+console.log('🔍 [useHistoricalObjects.ts] apiService:', apiService);
 
 export const useHistoricalObjects = (searchTerm?: string) => {
   const [objects, setObjects] = useState<HistoricalObject[]>([]);

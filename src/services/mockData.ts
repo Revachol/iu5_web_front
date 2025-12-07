@@ -1,6 +1,8 @@
 // services/mockData.ts
 import type { HistoricalObject } from './apiService';
 
+console.log('🔍 [mockData.ts] Module loaded');
+
 export const mockHistoricalObjects: HistoricalObject[] = [
   {
     ID: 1,

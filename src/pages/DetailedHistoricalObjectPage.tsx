@@ -7,6 +7,8 @@ import './DetailedHistoricalObjectPage.css';
 import Breadcrumbs from '../modules/Breadcrumbs';
 import type { BreadcrumbItem } from '../types';
 
+console.log('🔍 [DetailedHistoricalObjectPage.tsx] Module loaded');
+
 const DetailedHistoricalObjectPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
