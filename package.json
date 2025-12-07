@@ -13,7 +13,8 @@
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
     "tauri:build": "tauri build",
-    "tauri:test": "npm run build:tauri && tauri build --debug"
+    "tauri:test": "npm run build:tauri && tauri build --debug",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.10.1",
