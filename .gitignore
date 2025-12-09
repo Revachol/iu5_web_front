@@ -31,3 +31,4 @@ ca.key
 cert.key
 ca.crt
 cert.crt
+src-tauri/target
