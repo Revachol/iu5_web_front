@@ -1,154 +1,166 @@
+// pages/HistoricalObjectsPage.tsx
 import React, { useState } from 'react';
-import { Container, Row, Col, Spinner, Alert, Card, Badge } from 'react-bootstrap';
+import { Container, Row, Col, Spinner, Alert, Badge } from 'react-bootstrap';
+import ObjectCard from '../modules/HOCard';
+import SearchForm from '../modules/SearchForm';
+import BasketIcon from '../modules/Basket';
 import { useHistoricalObjects } from '../hooks/useHistoricalObjects';
-import { Link } from 'react-router-dom';
-
-console.log('🔍 [HistoricalObjectsPage.tsx] Module loaded');
+import { useSearchInput, useAppliedSearch } from '../slices/searchSlice';
+import { useFiltersData } from '../hooks/useSearchData';
+import './HistoricalObjectsPage.css';
 
 const HistoricalObjectsPage: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [appliedSearch, setAppliedSearch] = useState('');
-  const { objects, loading, error } = useHistoricalObjects(appliedSearch);
+  // Используем Redux для управления состоянием поиска
+  const searchInput = useSearchInput();
+  const appliedSearch = useAppliedSearch();
+  const { setSearchInput, applySearch } = useFiltersData();
+  
+  const { objects, loading, usingMockData } = useHistoricalObjects(appliedSearch);
 
-  const handleSearch = () => {
-    setAppliedSearch(searchTerm);
+  // Временное состояние для корзины (пока неактивна)
+  const [basketItems] = useState<number[]>([]);
+
+  // Гарантируем, что filteredObjects всегда массив
+  const filteredObjects = Array.isArray(objects) 
+    ? objects.filter(obj => {
+        if (!obj || typeof obj !== 'object') return false;
+        
+        // Если применен поиск, фильтруем по appliedSearch
+        if (appliedSearch) {
+          return (
+            obj.Name?.toLowerCase().includes(appliedSearch.toLowerCase()) ||
+            obj.Description?.toLowerCase().includes(appliedSearch.toLowerCase()) ||
+            obj.HistoricalRegion?.toLowerCase().includes(appliedSearch.toLowerCase())
+          );
+        }
+        
+        // Если поиск не применен, показываем все объекты
+        return true;
+      })
+    : [];
+
+  const handleAddToCart = (objectId: number) => {
+    console.log(`Added object ${objectId} to cart`);
+    // TODO: Реализовать добавление в корзину
+    // Пока просто логируем действие
   };
 
-  const clearSearch = () => {
-    setSearchTerm('');
-    setAppliedSearch('');
+  const handleSearchChange = (value: string) => {
+    setSearchInput(value);
+  };
+
+  const handleSearchApply = () => {
+    applySearch();
   };
 
   if (loading) {
     return (
-      <Container className="text-center mt-5">
-        <Spinner animation="border" />
-        <p className="mt-3">Загрузка объектов...</p>
-      </Container>
-    );
-  }
-
-  if (error) {
-    return (
-      <Container className="mt-5">
-        <Alert variant="danger">
-          <Alert.Heading>Ошибка загрузки</Alert.Heading>
-          <p>{error}</p>
-        </Alert>
-      </Container>
+      <div className="historical-objects-page">
+        <Container className="objects-container">
+          <div className="loading-spinner">
+            <Spinner animation="border" role="status">
+              <span className="visually-hidden">Загрузка...</span>
+            </Spinner>
+            <p>Загрузка исторических объектов...</p>
+          </div>
+        </Container>
+      </div>
     );
   }
 
   return (
-    <Container className="mt-4">
-      {/* Поиск */}
-      <Row className="mb-4">
-        <Col md={8}>
-          <h1>Каталог исторических объектов</h1>
-          <p className="text-muted">
-            Исследуйте уникальные исторические артефакты различных эпох и культур
-          </p>
-        </Col>
-        <Col md={4}>
-          <div className="d-flex gap-2">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Поиск объектов..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-            />
-            <button 
-              className="btn btn-primary"
-              onClick={handleSearch}
-            >
-              🔍
-            </button>
-            {appliedSearch && (
-              <button 
-                className="btn btn-outline-secondary"
-                onClick={clearSearch}
-              >
-                ✕
-              </button>
-            )}
-          </div>
-        </Col>
-      </Row>
-
-      {/* Результаты поиска */}
-      {appliedSearch && (
-        <Row className="mb-3">
-          <Col>
-            <p>
-              Результаты поиска: "{appliedSearch}"
-              <button 
-                className="btn btn-link p-0 ms-2"
-                onClick={clearSearch}
-              >
-                (очистить)
-              </button>
+    <div className="historical-objects-page">
+      <Container className="objects-container">
+        {/* Заголовок и поиск */}
+        <Row className="page-header">
+          <Col lg={8}>
+            <div className="d-flex align-items-center gap-3 mb-2">
+              <h1 className="page-title mb-0">Каталог исторических объектов</h1>
+              {usingMockData && (
+                <Badge bg="warning" text="dark">
+                  Демо-данные
+                </Badge>
+              )}
+            </div>
+            <p className="page-subtitle">
+              Исследуйте уникальные исторические артефакты различных эпох и культур
             </p>
           </Col>
+          <Col lg={4}>
+            <SearchForm
+              searchTerm={searchInput}
+              onSearchChange={handleSearchChange}
+              onSearchApply={handleSearchApply}
+              placeholder="Поиск исторических объектов..."
+            />
+          </Col>
         </Row>
-      )}
 
-      {/* Сетка объектов */}
-      <Row>
-        {objects.map((object) => (
-          <Col key={object.ID} lg={4} md={6} className="mb-4">
-            <Card className="h-100">
-              {object.ImageURL && (
-                <Card.Img 
-                  variant="top" 
-                  src={object.ImageURL} 
-                  style={{ height: '200px', objectFit: 'cover' }}
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x200?text=No+Image';
-                  }}
-                />
-              )}
-              <Card.Body className="d-flex flex-column">
-                <Card.Title>{object.Name}</Card.Title>
-                <Card.Text className="flex-grow-1">
-                  {object.Description?.substring(0, 150)}...
-                </Card.Text>
-                <div className="mt-auto">
-                  <Badge bg="secondary" className="me-2">
-                    {object.HistoricalPeriod}
-                  </Badge>
-                  <Badge bg="info">
-                    {object.HistoricalRegion}
-                  </Badge>
-                  <div className="mt-2">
-                    <strong>{object.PriceUSD} USD</strong> за {object.Unit}
-                  </div>
-                  <Link 
-                    to={`/historical_object/${object.ID}`}
-                    className="btn btn-primary btn-sm mt-2 w-100"
+        {/* Показываем примененный поисковый запрос */}
+        {appliedSearch && (
+          <Row className="mb-2">
+            <Col>
+              <div className="applied-search-info">
+                <small className="text-muted">
+                  Поиск: "<strong>{appliedSearch}</strong>"
+                  <button 
+                    className="btn btn-sm btn-link text-muted p-0 ms-2"
+                    onClick={() => {
+                      setSearchInput('');
+                      applySearch(); // Применяем пустой поиск чтобы сбросить
+                    }}
                   >
-                    Подробнее
-                  </Link>
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-      </Row>
+                    × очистить
+                  </button>
+                </small>
+              </div>
+            </Col>
+          </Row>
+        )}
 
-      {/* Сообщение если ничего не найдено */}
-      {objects.length === 0 && !loading && (
-        <Row>
-          <Col className="text-center">
-            <div className="py-5">
-              <h3>Объекты не найдены</h3>
-              <p className="text-muted">Попробуйте изменить поисковый запрос</p>
-            </div>
-          </Col>
+        {/* Предупреждение об использовании моков */}
+        {usingMockData && (
+          <Row className="mb-3">
+            <Col>
+              <Alert variant="warning" className="mb-0">
+                <Alert.Heading className="h6">Используются демонстрационные данные</Alert.Heading>
+                <p className="mb-0">Сервер временно недоступен. Показаны примеры исторических объектов.</p>
+              </Alert>
+            </Col>
+          </Row>
+        )}
+
+        {/* Сетка объектов */}
+        <Row className="objects-grid">
+          {filteredObjects.map((object) => (
+            <Col key={object.ID} lg={4} md={6} className="mb-4">
+              <ObjectCard
+                object={object}
+                onAddToCart={handleAddToCart}
+              />
+            </Col>
+          ))}
         </Row>
-      )}
-    </Container>
+
+        {/* Сообщение если ничего не найдено */}
+        {filteredObjects.length === 0 && !loading && (
+          <Row>
+            <Col className="text-center">
+              <div className="no-results">
+                <h3>Объекты не найдены</h3>
+                <p>Попробуйте изменить поисковый запрос</p>
+              </div>
+            </Col>
+          </Row>
+        )}
+      </Container>
+
+      {/* Иконка корзины (пока неактивна) */}
+      <BasketIcon 
+        itemCount={basketItems.length}
+        isActive={false}
+      />
+    </div>
   );
 };
 

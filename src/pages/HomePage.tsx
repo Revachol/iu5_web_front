@@ -21,20 +21,6 @@ const HomePage: React.FC = () => {
               Исследуйте уникальные исторические артефакты и создайте собственную 
               исследовательскую заявку.
             </p>
-            <div className="hero-buttons">
-              <Button
-                className="hero-button primary"
-                onClick={() => navigate('/historical_objects')}
-              >
-                Каталог исторических объектов
-              </Button>
-              <Button
-                className="hero-button secondary"
-                onClick={() => navigate('/my-request')}
-              >
-                Моя заявка
-              </Button>
-            </div>
           </Col>
         </Row>
 

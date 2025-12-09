@@ -5,8 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import type { HistoricalObject } from '../services/apiService';
 import './HOCard.css';
 
-console.log('🔍 [HOCard.tsx] Module loaded');
-
 interface ObjectCardProps {
   object: HistoricalObject;
   onAddToCart: (objectId: number) => void;

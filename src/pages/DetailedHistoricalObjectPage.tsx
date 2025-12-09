@@ -7,15 +7,13 @@ import './DetailedHistoricalObjectPage.css';
 import Breadcrumbs from '../modules/Breadcrumbs';
 import type { BreadcrumbItem } from '../types';
 
-console.log('🔍 [DetailedHistoricalObjectPage.tsx] Module loaded');
-
 const DetailedHistoricalObjectPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const objectId = parseInt(id || '0');
   
   // Используем хук для одного объекта
-  const { object, loading, error } = useHistoricalObject(objectId);
+  const { object, loading, error, usingMockData } = useHistoricalObject(objectId);
 
   const breadcrumbItems: BreadcrumbItem[] = [
     { label: 'Главная', path: '/' },
@@ -91,6 +89,18 @@ const DetailedHistoricalObjectPage: React.FC = () => {
             </Button>
           </Col>
         </Row>
+
+        {/* Предупреждение об использовании моков */}
+        {usingMockData && (
+          <Row className="mt-3">
+            <Col>
+              <Alert variant="warning">
+                <Alert.Heading className="h6">Используются демонстрационные данные</Alert.Heading>
+                <p className="mb-0">Сервер временно недоступен. Показан пример исторического объекта.</p>
+              </Alert>
+            </Col>
+          </Row>
+        )}
 
         {/* Основная информация об объекте */}
         <Row className="object-content">

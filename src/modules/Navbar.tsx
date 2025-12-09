@@ -10,13 +10,19 @@ const CustomNavbar: React.FC = () => {
   return (
     <Navbar className="custom-navbar" fixed="top">
       <Container fluid className="navbar-container">
-        {/* Кнопка "Главная" слева */}
+        {/* Кнопки навигации слева */}
         <Nav className="me-auto">
           <Nav.Link 
             onClick={() => navigate('/')}
             className="home-link"
           >
             <h1>Главная</h1>
+          </Nav.Link>
+          <Nav.Link 
+            onClick={() => navigate('/historical_objects')}
+            className="home-link"
+          >
+            <h1>Каталог</h1>
           </Nav.Link>
         </Nav>
 
@@ -35,7 +41,7 @@ const CustomNavbar: React.FC = () => {
 
         {/* Пустой элемент для балансировки */}
         <Nav className="ms-auto">
-          <div style={{ width: '100px' }}></div>
+          <div style={{ width: '200px' }}></div>
         </Nav>
       </Container>
     </Navbar>
