@@ -1,11 +1,9 @@
 // pages/HomePage.tsx
 import React from 'react';
-import { Container, Row, Col, Button, Card } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { Container, Row, Col, Card } from 'react-bootstrap';
 import './HomePage.css';
 
 const HomePage: React.FC = () => {
-  const navigate = useNavigate();
 
   return (
     <div className="home-page">
@@ -21,20 +19,6 @@ const HomePage: React.FC = () => {
               Исследуйте уникальные исторические артефакты и создайте собственную 
               исследовательскую заявку.
             </p>
-            <div className="hero-buttons">
-              <Button
-                className="hero-button primary"
-                onClick={() => navigate('/historical_objects')}
-              >
-                Каталог исторических объектов
-              </Button>
-              <Button
-                className="hero-button secondary"
-                onClick={() => navigate('/my-request')}
-              >
-                Моя заявка
-              </Button>
-            </div>
           </Col>
         </Row>
 

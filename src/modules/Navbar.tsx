@@ -2,7 +2,6 @@
 import React from 'react';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import logo from '../assets/logo.svg';
 import './Navbar.css';
 
 const CustomNavbar: React.FC = () => {
@@ -11,7 +10,7 @@ const CustomNavbar: React.FC = () => {
   return (
     <Navbar className="custom-navbar" fixed="top">
       <Container fluid className="navbar-container">
-        {/* Кнопка "Главная" слева */}
+        {/* Кнопки навигации слева */}
         <Nav className="me-auto">
           <Nav.Link 
             onClick={() => navigate('/')}
@@ -19,12 +18,18 @@ const CustomNavbar: React.FC = () => {
           >
             <h1>Главная</h1>
           </Nav.Link>
+          <Nav.Link 
+            onClick={() => navigate('/historical_objects')}
+            className="home-link"
+          >
+            <h1>Каталог</h1>
+          </Nav.Link>
         </Nav>
 
         {/* Логотип по центру */}
         <Navbar.Brand className="logo-center">
           <img
-            src={logo}
+            src="images/mock/logo.svg"
             width="80"
             height="45"
             className="logo"
@@ -36,7 +41,7 @@ const CustomNavbar: React.FC = () => {
 
         {/* Пустой элемент для балансировки */}
         <Nav className="ms-auto">
-          <div style={{ width: '100px' }}></div>
+          <div style={{ width: '200px' }}></div>
         </Nav>
       </Container>
     </Navbar>
