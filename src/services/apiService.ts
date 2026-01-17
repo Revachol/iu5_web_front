@@ -1,6 +1,21 @@
 // services/apiService.ts
-console.log('🔍 [apiService.ts] Module loading...');
 
+// Интерфейс для данных из API (с новыми названиями полей)
+interface HistoricalObjectAPI {
+  ID: number;
+  NameOfHistoricalObject: string;
+  DescriptionOfHistoricalObject: string;
+  PriceUSDOfHistoricalObject: number;
+  UnitOfHistoricalObject: string;
+  HistoricalPeriodOfHistoricalObject: string;
+  HistoricalRegionOfHistoricalObject: string;
+  DataSourceOfHistoricalObject: string;
+  ImageURLOfHistoricalObject: string;
+  IsActiveOfHistoricalObject: boolean;
+  CreatedAtOfHistoricalObject: string;
+}
+
+// Интерфейс для использования в приложении (старые названия для совместимости)
 export interface HistoricalObject {
   ID: number;
   Name: string;
@@ -15,7 +30,22 @@ export interface HistoricalObject {
   CreatedAt: string;
 }
 
-console.log('🔍 [apiService.ts] HistoricalObject interface defined');
+// Функция маппинга из API формата в внутренний формат
+function mapAPIObjectToInternal(apiObj: HistoricalObjectAPI): HistoricalObject {
+  return {
+    ID: apiObj.ID,
+    Name: apiObj.NameOfHistoricalObject,
+    Description: apiObj.DescriptionOfHistoricalObject,
+    PriceUSD: apiObj.PriceUSDOfHistoricalObject,
+    Unit: apiObj.UnitOfHistoricalObject,
+    HistoricalPeriod: apiObj.HistoricalPeriodOfHistoricalObject,
+    HistoricalRegion: apiObj.HistoricalRegionOfHistoricalObject,
+    DataSource: apiObj.DataSourceOfHistoricalObject,
+    ImageURL: apiObj.ImageURLOfHistoricalObject,
+    IsActive: apiObj.IsActiveOfHistoricalObject,
+    CreatedAt: apiObj.CreatedAtOfHistoricalObject,
+  };
+}
 
 export class ApiService {
   private baseURL: string;
@@ -26,7 +56,6 @@ export class ApiService {
     const currentVersion = '2.0'; // Увеличиваем версию для сброса старых настроек
     
     if (configVersion !== currentVersion) {
-      console.log('🔄 Обновление конфигурации API...');
       localStorage.setItem('api_config_version', currentVersion);
       localStorage.setItem('api_ip', 'localhost:80');
     }
@@ -34,7 +63,6 @@ export class ApiService {
     // Получаем IP из localStorage или используем дефолтный
     const savedIP = localStorage.getItem('api_ip') || 'localhost:80';
     this.baseURL = `http://${savedIP}/api`;
-    console.log('🌐 API Base URL:', this.baseURL);
   }
 
   setIPAddress(ip: string) {
@@ -46,11 +74,9 @@ export class ApiService {
     try {
       let url = `${this.baseURL}/historical_objects`;
       if (searchTerm) {
-        url += `?name=${encodeURIComponent(searchTerm)}`;
+        url += `?title=${encodeURIComponent(searchTerm)}`;
       }
 
-      console.log('📡 Fetching from:', url);
-      
       const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -63,7 +89,9 @@ export class ApiService {
       }
 
       const data = await response.json();
-      return data.historical_objects || data.data || data.items || [];
+      const apiObjects: HistoricalObjectAPI[] = data.historical_objects || data.data || data.items || [];
+      // Преобразуем данные из API формата в внутренний формат
+      return apiObjects.map(mapAPIObjectToInternal);
       
     } catch (error) {
       console.error('❌ API Error:', error);
@@ -80,7 +108,9 @@ export class ApiService {
       }
 
       const data = await response.json();
-      return data.historical_object || data.data || data;
+      const apiObject: HistoricalObjectAPI = data.historical_object || data.data || data;
+      // Преобразуем данные из API формата в внутренний формат
+      return mapAPIObjectToInternal(apiObject);
       
     } catch (error) {
       console.error(`❌ Error fetching object ${id}:`, error);
@@ -98,9 +128,4 @@ export class ApiService {
   }
 }
 
-console.log('🔍 [apiService.ts] ApiService class defined');
-
 export const apiService = new ApiService();
-
-console.log('🔍 [apiService.ts] apiService instance created:', apiService);
-console.log('🔍 [apiService.ts] Module loaded successfully!');
