@@ -17,9 +17,6 @@ const HistoricalObjectsPage: React.FC = () => {
   
   const { objects, loading, usingMockData } = useHistoricalObjects(appliedSearch);
 
-  // Временное состояние для корзины (пока неактивна)
-  const [basketItems] = useState<number[]>([]);
-
   // Гарантируем, что filteredObjects всегда массив
   const filteredObjects = Array.isArray(objects) 
     ? objects.filter(obj => {
@@ -51,6 +48,12 @@ const HistoricalObjectsPage: React.FC = () => {
 
   const handleSearchApply = () => {
     applySearch();
+  };
+
+  const handleBasketClick = () => {
+    console.log('🛒 Basket clicked - navigating to basket page');
+    // TODO: Навигация на страницу корзины
+    // navigate('/my-request');
   };
 
   if (loading) {
@@ -155,11 +158,8 @@ const HistoricalObjectsPage: React.FC = () => {
         )}
       </Container>
 
-      {/* Иконка корзины (пока неактивна) */}
-      <BasketIcon 
-        itemCount={basketItems.length}
-        isActive={false}
-      />
+      {/* Иконка корзины с активным состоянием */}
+      <BasketIcon onBasketClick={handleBasketClick} />
     </div>
   );
 };

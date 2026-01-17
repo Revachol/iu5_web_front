@@ -1,27 +1,37 @@
 // components/BasketIcon.tsx
 import React from 'react';
+import { useBasketCount } from '../hooks/useBasketCount';
 import './Basket.css';
 
 interface BasketIconProps {
-  itemCount?: number;
-  isActive?: boolean;
+  onBasketClick?: () => void;
 }
 
-const BasketIcon: React.FC<BasketIconProps> = ({ 
-  itemCount = 0, 
-  isActive = false 
-}) => {
+const BasketIcon: React.FC<BasketIconProps> = ({ onBasketClick }) => {
+  const { basketCount, isActive } = useBasketCount();
+
+  const handleClick = () => {
+    if (isActive && onBasketClick) {
+      onBasketClick();
+    }
+  };
+
   return (
     <div className={`basket-container ${!isActive ? 'basket-inactive' : ''}`}>
-      <div className="basket-icon">
+      <div 
+        className="basket-icon"
+        onClick={handleClick}
+        role={isActive ? 'button' : 'presentation'}
+        tabIndex={isActive ? 0 : -1}
+      >
         <img 
           src="http://localhost:9000/iu5-web/img/pngwing.com (1).png" 
           alt="Корзина"
           className="basket-image"
         />
-        {itemCount > 0 && (
+        {basketCount > 0 && (
           <div className="basket-counter">
-            {itemCount}
+            {basketCount > 99 ? '99+' : basketCount}
           </div>
         )}
       </div>

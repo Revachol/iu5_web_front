@@ -126,6 +126,21 @@ export class ApiService {
       return false;
     }
   }
+
+  async getHistoricalEstimateCount(): Promise<number> {
+    try {
+      const response = await fetch(`${this.baseURL}/historical_estimate_count`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      // Заглушка: возвращаем 0 пока endpoint не готов
+      return data.count || 0;
+    } catch (error) {
+      console.error('Error fetching basket count:', error);
+      return 0;
+    }
+  }
 }
 
 export const apiService = new ApiService();
